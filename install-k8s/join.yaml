@@ -1,0 +1,10 @@
+---
+- name: Getting token from the master node
+  hosts: masters
+  roles:
+    - role: get-join-command
+
+- name: Joining workers to the cluster
+  hosts: workers
+  roles:
+    - role: join-cluster

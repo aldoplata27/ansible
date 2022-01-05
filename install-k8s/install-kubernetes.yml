@@ -1,0 +1,36 @@
+---
+- name: Install kubernetes packages
+  hosts: all
+  roles:
+    - install-kubernetes-packages
+
+- name: Disabling swap on all hosts
+  hosts: all
+  roles: 
+    - disable-swap
+
+- name: Configuring network on hosts
+  hosts: all
+  roles: 
+    - configure-network-rules
+
+- name: Installing kubectl on master node
+  hosts: masters
+  roles:
+    - install-kubectl
+
+- name: Deploying kubernetes cluster
+  hosts: masters
+  roles:
+    - role:  deploy-kubernetes
+
+- name: Getting token from the master node
+  hosts: masters
+  roles:
+    - role: get-join-command
+
+- name: Joining workers to the cluster
+  hosts: workers
+  roles:
+    - role: join-cluster
+

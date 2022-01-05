@@ -1,0 +1,9 @@
+---
+# tasks file for join-cluster
+#- name: debug hostvars
+#  debug: 
+#    msg: ""
+
+- name: Joining to the cluster
+  become: yes
+  shell: "{{hostvars[groups['masters'][0]]['join_command']}}"

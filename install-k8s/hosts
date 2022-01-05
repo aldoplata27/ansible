@@ -1,0 +1,10 @@
+[masters]
+54.188.51.224 ansible_user=ansible
+
+[workers]
+54.201.141.57 ansible_user=ansible
+52.24.155.140 ansible_user=ansible
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+

@@ -1,0 +1,66 @@
+---
+# tasks file for install-kubernetes-packages
+- name: Install Docker
+  become: yes
+  apt: 
+    name: docker.io
+    state: present
+    update_cache: yes
+- name: change cgroup of docker to systemd
+  become: yes
+  copy: 
+    dest: /etc/docker/daemon.json
+    content: |
+      {
+        "exec-opts": ["native.cgroupdriver=systemd"]
+      }
+- name: reload daemon
+  become: yes
+  systemd:
+    daemon_reload: yes
+
+- name: Restart docker
+  become: yes
+  service: 
+    name: docker
+    state: restarted
+
+- name: Enabling Docker
+  become: yes 
+  service:
+    name: docker
+    enabled: yes
+
+- name: Install Apt Transport https
+  become: yes
+  apt:
+    name: apt-transport-https
+    state: present
+
+- name: Add kubernetes apt-key
+  become: yes
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Add kubernetes APT repository
+  become: yes
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes
+    
+- name: Install kubelet
+  become: yes
+  apt:
+    name: kubelet=1.22.0-00
+    state: present
+    update_cache: true
+
+- name: Installing kubeadm…
+  become: yes
+  apt:
+    name: kubeadm=1.22.0-00
+    state: present
+    update_cache: true
+
