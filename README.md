@@ -1,2 +1,2 @@
-# ansible
-repository with samples for ansible
+# Ansible
+Samples scripts for different ansible projects configuration
