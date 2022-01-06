@@ -1,0 +1,10 @@
+---
+- name: Verify if kubernetes is alredy installed
+  hosts: all
+  roles:
+    - verify-if-kubernetes-alredy-installed
+
+- name: Upgrade kubeadm on first control plane
+  hosts: masters[0]
+  roles: 
+    - update-kubeadm-on-primary-controlplane

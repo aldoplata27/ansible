@@ -14,8 +14,8 @@
   roles: 
     - configure-network-rules
 
-- name: Installing kubectl on master node
-  hosts: masters
+- name: Installing kubectl #on master node
+  hosts: all
   roles:
     - install-kubectl
 

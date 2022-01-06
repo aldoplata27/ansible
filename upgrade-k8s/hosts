@@ -7,4 +7,4 @@
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
-
+new_version_k8s_desired=1.23.0-00   #sample 1.23.0-00

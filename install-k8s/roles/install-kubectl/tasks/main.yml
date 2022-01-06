@@ -1,6 +1,6 @@
 ---
 # tasks file for install-kubectl
-- name: Installing kubectl on master node..
+- name: Installing kubectl #   on master node..
   become: yes
   apt:
     name: kubectl=1.22.0-00

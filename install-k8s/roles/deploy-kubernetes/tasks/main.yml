@@ -18,7 +18,7 @@
     remote_src: yes
     owner: ansible
 
-- name: Configuring user ansible to use kubelet 
+- name: Configuring ansible user to use kubelet 
   become: yes
   copy:
     src: /etc/kubernetes/admin.conf
