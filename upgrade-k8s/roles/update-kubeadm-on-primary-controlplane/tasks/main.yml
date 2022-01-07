@@ -2,15 +2,45 @@
 # tasks file for update-kubeadm-on-primary-controlplane
 - name: unmark hold kubeadm
   become: yes
-  dpkg_selections:
+  command:
+    cmd: apt-mark unhold kubeadm
+
+- name: update kubeadm on primary control node
+  become: yes
+  apt: 
+    name: 'kubeadm={{new_version_k8s_desired}}'
+    state: present
+    update_cache: yes
+
+- name: holding kubeadm
+  become: yes
+  dpkg_selections: 
     name: kubeadm
     selection: hold
 
-#- name: update kubeadm on primary control node
+- name: apply upgrade plan
+  command: 
+    cmd: sudo kubeadm upgrade apply v1.23.0 -y
+
+
+#- name: Get kubeadm upgrade plan
 #  become: yes
-#  apt: 
-#    name: kubeadm={{new_version_k8s_desired}}
-#    state: present
-#    update_cache: yes
+#  command: 
+#    cmd: kubeadm upgrade plan
+#  register: kubeupgrade
+
+#- debug:
+#    msg: "{{kubeupgrade}}"
+
+#- name: Gather package facts
+#  package_facts:
+#    manager: apt
+
+#- name: check if version of kubeadm is the desired
+#  fail: 
+#    msg: "something whent wrong on update"
+#  when: new_version_k8s_desired != ansible_facts.packages.kubeadm[0].version
+## No estoy seguro de que esta tarea sea necesaria
+
 
 
