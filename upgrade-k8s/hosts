@@ -1,10 +1,11 @@
 [masters]
-52.26.79.62 ansible_user=ansible
+34.220.225.47 ansible_user=ansible
 
 [workers]
-54.71.129.135 ansible_user=ansible
-34.221.93.3 ansible_user=ansible
+34.217.73.86 ansible_user=ansible
+35.86.117.86 ansible_user=ansible
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3
-new_version_k8s_desired=1.23.0-00   #sample 1.23.0-00
+new_version_k8s_desired='1.23.0-00'
+#sample 1.23.0-00
