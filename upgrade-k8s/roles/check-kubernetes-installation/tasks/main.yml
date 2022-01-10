@@ -4,7 +4,7 @@
   package_facts:
     manager: apt
 
-- name: Verify is kubeadm alredy installed
+- name: Verifying installation of kubernetes
   fail:
     msg: "kubernetes are not installed on this host"
   failed_when: "('kubeadm' not in ansible_facts.packages) or ('kubelet' not in ansible_facts.packages) or 'kubectl' not in ansible_facts.packages" 

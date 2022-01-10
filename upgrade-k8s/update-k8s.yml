@@ -1,10 +1,30 @@
 ---
-- name: Verify if kubernetes is alredy installed
+- name: Check that kubernetes is alredy installed
   hosts: all
   roles:
-    - verify-if-kubernetes-alredy-installed
+    - check-kubernetes-installation
 
-- name: Upgrade kubeadm on first control plane
-  hosts: masters[0]
+- name: Upgrade kube on masters
+  hosts: masters
+  serial: 1
   roles: 
-    - update-kubeadm-on-primary-controlplane
+    - upgrade-k8s-master
+
+- name: upgrade kubeadm on workers
+  hosts: workers
+  roles: 
+    - upgrade-kubeadm-worker-nodes
+
+- name: upgrade kubelet, kubectl on every worker one at a time
+  hosts: workers
+  serial: 1
+  roles: 
+    - upgrade-kube-workers
+  #tasks:
+  #  - name: Run role tasks on every host one at time
+  #    include_tasks: ./roles/update-kube-workers/tasks/main.yml
+        
+
+  
+  
+  

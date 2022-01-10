@@ -1,0 +1,54 @@
+---
+# tasks file for update-kube-workers
+- name: Cordoning node
+  kubernetes.core.k8s_drain: 
+    state: drain
+    name: "{{ansible_nodename}}"
+    delete_options: 
+      ignore_daemonsets: yes
+  delegate_to: "{{groups['masters'][0]}}"
+
+- name: Unholding kubelet, kubectl
+  become: yes
+  command:
+    cmd: apt-mark unhold kubelet kubectl
+
+- name: Installing kubelet and kubectl desired version
+  become: yes
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  with_items:
+    - "kubelet={{new_k8s_version_desired}}"
+    - "kubectl={{new_k8s_version_desired}}"
+
+- name: Holding again kubelet 
+  become: yes
+  dpkg_selections: 
+    name: kubelet
+    selection: hold
+
+- name: Holding again kubectl 
+  become: yes
+  dpkg_selections: 
+    name: kubectl
+    selection: hold
+
+- name: Reload daemon
+  become: yes
+  systemd:
+    daemon_reload: yes
+  
+- name: Restart kubelet
+  become: yes
+  service: 
+    name: kubelet
+    state: restarted
+
+- name: Uncordon worker node
+  kubernetes.core.k8s_drain: 
+    state: uncordon
+    name: "{{ansible_nodename}}"
+  delegate_to: "{{groups['masters'][0]}}"
+

@@ -1,0 +1,17 @@
+#- name: upgrade kubelet, kubectl on every worker one at a time
+#  hosts: workers
+#  serial: 1
+#  roles: 
+  #  - update-kube-workers
+  #tasks:
+  #  - name: Run role tasks on every host one at time
+  #    include_tasks: ./roles/update-kube-workers/tasks/main.yml
+      #loop: "{{ groups['workers'] }}"
+      #loop_control:
+      #  loop_var: delegate_host
+
+- name: chack anisble variables
+  hosts: masters
+  tasks:
+      - debug:
+          msg: "{{groups['masters'][0] == inventory_hostname}}"

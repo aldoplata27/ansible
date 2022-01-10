@@ -1,0 +1,25 @@
+---
+# tasks file for upgrade-kubeadm-worker-nodes
+- name: unmark hold kubeadm
+  become: yes
+  command:
+    cmd: apt-mark unhold kubeadm
+
+- name: update kubeadm on node
+  become: yes
+  apt: 
+    name: 'kubeadm={{new_k8s_version_desired}}'
+    state: present
+    update_cache: yes
+
+- name: holding kubeadm
+  become: yes
+  dpkg_selections: 
+    name: kubeadm
+    selection: hold 
+
+- name: updating kubelet info
+  become: yes
+  command: 
+    cmd: kubeadm upgrade node
+
