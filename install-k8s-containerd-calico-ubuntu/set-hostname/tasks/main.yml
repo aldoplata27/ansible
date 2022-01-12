@@ -1,0 +1,16 @@
+---
+# tasks file for set-hostname
+- name: Changing hostname on node
+  become: yes
+  hostname: 
+    name: "{{inventory_hostname}}"
+
+- name: Insert hosts on /etc/hosts
+  become: yes
+  blockinfile: 
+    path: /etc/hosts
+    insertafter: EOF
+    block: |
+      {{master_private_ip}} master
+      {{worker1_private_ip}} worker1 
+      {{worker2_private_ip}} worker2 

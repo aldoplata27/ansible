@@ -1,0 +1,35 @@
+---
+- name: set hostnames
+  hosts: all
+  roles:
+    - set-hostname
+
+- name: configuration before install k8s
+  hosts: all
+  roles: 
+    - configuration-before-install-containerd
+
+- name: configure and install containerd
+  hosts: all
+  roles: 
+    - configure-install-containerd
+
+- name: installing k8s
+  hosts: all
+  roles:
+    - install-k8s
+
+- name: Deploy k8s on master
+  hosts: masters[0]
+  roles: 
+    - init-k8s-master
+
+- name: Get join command
+  hosts: masters[0]
+  roles:
+    - get-join-command
+
+- name: join cluster
+  hosts: workers
+  roles:
+    - join-cluster

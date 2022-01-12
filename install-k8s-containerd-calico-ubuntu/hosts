@@ -1,0 +1,12 @@
+[masters]
+master ansible_host=35.164.77.17 ansible_user=ansible
+
+[workers]
+worker1 ansible_host=34.215.66.149 ansible_user=ansible
+worker2 ansible_host=18.237.20.126 ansible_user=ansible
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+master_private_ip=172.31.41.69
+worker1_private_ip=172.31.39.78
+worker2_private_ip=172.31.33.43

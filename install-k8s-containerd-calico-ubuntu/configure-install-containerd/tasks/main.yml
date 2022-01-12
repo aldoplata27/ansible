@@ -1,0 +1,27 @@
+---
+# tasks file for configure-install-containerd
+- name: Install containerd
+  become: yes
+  apt: 
+    name: containerd
+    update_cache: yes
+    state: present
+
+- name: create etc containerd directory
+  become: yes
+  file: 
+    path: /etc/containerd
+    state: directory
+
+- name: Change containerd default configuration
+  become: yes
+  command: 
+    cmd: sudo containerd config default | sudo tee /etc/containerd/config.toml
+
+- name: Restart containerd
+  become: yes
+  service: 
+    name: containerd
+    state: restarted
+
+

@@ -1,0 +1,68 @@
+---
+# tasks file for install-k8s
+- name: Disabling swap
+  become: yes
+  command: swapoff -a
+  
+- name: Disabling swap from fstab
+  become: yes
+  replace:
+    path: /etc/fstab
+    regexp: ‘^([^#].*?\sswap\s+sw\s+.*)$’
+    replace: ‘# \1’
+    backup: yes
+
+- name: Installing apt-transport and curl
+  become: yes
+  apt: 
+    name: "{{item}}"
+    state: present
+    update_cache: yes
+  with_items:
+    - apt-transport-https
+    - curl
+
+- name: Add kubernetes apt-key
+  become: yes
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Add kubernetes APT repository
+  become: yes
+  apt_repository:
+    repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes
+    
+- name: Install kubelet,kubeadm,kubectl
+  become: yes
+  apt:
+    name: "{{item}}"
+    state: present
+    update_cache: true
+    force: True
+  with_items: 
+    - kubeadm=1.22.0-00
+    - kubectl=1.22.0-00
+    - kubelet=1.22.0-00
+
+- name: Holding kubeadm
+  become: yes
+  dpkg_selections: 
+    name: kubeadm
+    selection: hold
+
+- name: Holding kubelet
+  become: yes
+  dpkg_selections: 
+    name: kubelet
+    selection: hold
+
+- name: Holding kubectl
+  become: yes
+  dpkg_selections: 
+    name: kubectl
+    selection: hold
+
+

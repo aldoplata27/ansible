@@ -20,13 +20,13 @@
 
 - name: Applying upgrade plan
   command: 
-    cmd: sudo kubeadm upgrade apply v1.23.0 -y
-  when: "{{groups['masters'][0] == inventory_hostname}}"
+    cmd: "sudo kubeadm upgrade apply v{{new_k8s_version_desired_short}} -y"
+  when: groups['masters'][0] == inventory_hostname
 
 - name: Applying upgrade node on secondary masters
   command: 
     cmd: sudo kubeadm upgrade node -y
-  when: "{{groups['masters'][0] != inventory_hostname}}"
+  when: groups['masters'][0] != inventory_hostname
 
 - name: Installing pip on host node
   become: yes
